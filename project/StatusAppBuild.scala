@@ -26,6 +26,18 @@ object StatusAppBuild extends Build {
 
     scalaVersion := "2.10.2",
 
+    name in Linux := name.value,
+    maintainer := "Philip Wills",
+    packageSummary := "Monitors autoscaling groups in an AWS account",
+    packageDescription :=
+      """Provides a high level overview of the state of autoscaling groups within an AWS account,
+        |primarily through introspection of the AWS APIs.
+      """.stripMargin,
+    linuxPackageMappings in Debian +=
+      (packageMapping(
+        ((sourceDirectory in Debian).value / "changelog") -> s"/usr/share/${name.value}/sbt/changelog.gz"
+      ) withUser "root" withGroup "root" withPerms "0644" gzipped) asDocs(),
+
     sourceGenerators in Compile <+= buildInfo,
     buildInfoKeys := Seq[BuildInfoKey](
       libraryDependencies in Compile,
