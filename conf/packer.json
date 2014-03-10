@@ -1,0 +1,30 @@
+{
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    },
+    "builders": [{
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "iam_instance_profile": "packer-builder-role",
+        "region": "eu-west-1",
+        "source_ami": "ami-d5ec01a2",
+        "instance_type": "t1.micro",
+        "ssh_username": "ubuntu",
+        "ami_name": "status-app-packer"
+    }],
+    "provisioners": [{
+        "type": "shell",
+        "inline": [
+            "sleep 30",
+            "sudo apt-get -y update",
+            "sudo apt-get install -y language-pack-en openjdk-7-jre-headless unzip",
+            "sudo adduser --system --home /status --disabled-password status",
+            "sudo wget https://s3-eu-west-1.amazonaws.com/ophan-dist/PROD/ophan-status-app/status-app.conf --directory-prefix=/etc/init",
+            "sudo wget https://s3-eu-west-1.amazonaws.com/ophan-dist/PROD/ophan-status-app/status-app-1.0.zip --directory-prefix=/status",
+            "sudo unzip -d /status /status/status-app-1.0.zip",
+            "sudo chown -R status /status/"
+        ]
+    }]
+}
