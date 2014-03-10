@@ -1,0 +1,8 @@
+{
+    "name": "status-app",
+    "version": "0.1.0",
+    "devDependencies": {
+        "gulp": "~3.5.5",
+        "gulp-bower": "~0.0.3"
+    }
+}
